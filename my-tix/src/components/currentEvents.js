@@ -26,6 +26,7 @@ class CurrentEvents extends React.Component{
 			formEditLocation:"",
 			eventID: "",
 			startdate: "",
+			endDate: "",
 			current: "",
 			url: "",
 			barcode: '',
@@ -115,8 +116,10 @@ class CurrentEvents extends React.Component{
 			var now = moment().format("YYYY MM DD");
 			console.log(now)
 			var StartDate = this.props.startdate
-			var converted = moment(StartDate).format("YYYY MM DD")
-			console.log(converted)
+			var startFormated = moment(StartDate).format("YYYY MM DD")
+			var EndDate = this.props.endDate
+			var endFormated  = moment(EndDate).format("YYYY MM DD")
+			console.log(startFormated)
 			var ID = this.props.id
 			console.log(ID)
 			if(moment().isBefore(StartDate)){
@@ -128,7 +131,8 @@ class CurrentEvents extends React.Component{
 
 			this.setState({
 				eventID: this.props.id,
-				startdate: StartDate,
+				startdate: startFormated,
+				endDate: endFormated,
 				current: now,
 				url: "/events/" + ID
 			
@@ -149,12 +153,12 @@ class CurrentEvents extends React.Component{
 		// 	<ListGroup>
 		// 		{this.props.currentEvents.map((obj, index) =>
 		// 		<ListGroupItem key={index}>
-				// if (before){
+
 					<Row bsClass="row" className="listItem">
 						<Col bsClass="col" xs={8}>
 							<h4>{this.props.name}</h4>
-							<h5>Start Date: {this.props.startdate}</h5>
-							<h5>EndDate: {this.props.endDate}</h5>
+							<h5>Start Date: {this.state.startdate}</h5>
+							<h5>EndDate: {this.state.endDate}</h5>
 								<FormGroup controlId="scanTicket">
 									<Col componentClass={ControlLabel} xs={3}>
 										Scan Ticket
@@ -242,7 +246,7 @@ class CurrentEvents extends React.Component{
 						</Col>
 						
 					</Row>
-					// }
+		
 
 				
 			//  	</ListGroupItem>

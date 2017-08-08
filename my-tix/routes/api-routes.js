@@ -6,10 +6,13 @@ var Event = require("../models/Event")
 var Option = require("../models/Option")
 var User = require("../server/db/models/user")
 var Customer = require("../models/Customer")
+var moment =require("moment")
 
 
 module.exports = function(app) {
 
+
+var today = moment().startOf('day')
 
 
 
@@ -52,9 +55,11 @@ app.post("/api/newEvent", function(req, res){
 
 
 
-	app.get("/api/Events", function(req, res){
+	app.get("/api/currentEvents", function(req, res){
 		
-		Event.find({}).exec(function(err, doc){
+		Event.find({
+		"StartDate":{$gte: today.toDate()}
+	}).exec(function(err, doc){
 
     if (err) {
       console.log(err);
@@ -64,6 +69,22 @@ app.post("/api/newEvent", function(req, res){
     }
 		})
 	})
+
+	app.get("/api/pastEvents", function(req, res){
+		
+		Event.find({
+		"StartDate":{$lte: today.toDate()}
+	}).exec(function(err, doc){
+
+    if (err) {
+      console.log(err);
+    }
+    else {
+      res.send(doc);
+    }
+		})
+	})
+
 
 
 	app.post("/api/Events/:id", function(req,res){

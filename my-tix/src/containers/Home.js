@@ -4,6 +4,7 @@ import { ListGroup } from 'react-bootstrap'
 import helper from "../utils/helpers"
 import CurrentEventsList from "../components/CurrentEventsList"
 import Graph from '../components/graphComponent'
+import PastEventsList from "../components/pastEventsList"
 
 class Home extends React.Component{
 
@@ -12,8 +13,8 @@ class Home extends React.Component{
 
 		this.state= {
 		
-			show3: false,
-			events: [],
+			currentEvents: [],
+			pastEvents: []
 
 
 		}
@@ -22,14 +23,7 @@ class Home extends React.Component{
 	}
 
 
-    showModal3 = () => {
-    this.setState({show3: true});
-	  }
 
-	  hideModal3 =() => {
-	    this.setState({show3: false});
-	  }
-//--------------------------------
 //--------------------------------
 
 	componentDidMount(){
@@ -38,12 +32,23 @@ class Home extends React.Component{
 
 			
 
-		helper.getEvents()
+		helper.getCurrentEvents()
 			.then(function(response){
 				// var newEvents=this.state.events
 				// newEvents.push(response.data)
 					this.setState({
-						events: response.data				
+						currentEvents: response.data				
+					});
+				console.log(response)
+			}.bind(this));
+
+
+		helper.getPastEvents()
+			.then(function(response){
+				// var newEvents=this.state.events
+				// newEvents.push(response.data)
+					this.setState({
+						pastEvents: response.data				
 					});
 				console.log(response)
 			}.bind(this));
@@ -60,37 +65,13 @@ class Home extends React.Component{
 					<Row bsClass="row">
 						<Col bsClass="col" xs={12}>
 							<PageHeader><small className="titles">Current Events</small></PageHeader>
-							<CurrentEventsList currentEvents={this.state.events} editEvent={this.props.editEvent} editOption={this.props.editOption}/>
+							<CurrentEventsList currentEvents={this.state.currentEvents} editEvent={this.props.editEvent} editOption={this.props.editOption}/>
 						</Col>
 					</Row>
 					<Row bsClass="row">
 						<Col bsClass="col" xs={12}>
 							<PageHeader><small className="titles">Past Events</small></PageHeader>
-							<ListGroup>
-								<ListGroupItem>
-									<Row bsClass="row">
-										<Col bsClass="col" xs={8}>
-											<h4>Event Name</h4>
-										</Col>
-										<Col bsClass="col" xs={4}>
-											<Button onClick={this.showModal3} block>View Data</Button>
-												<Modal
-								          show={this.state.show3}
-								          onHide={this.hideModal3}>
-													<Modal.Header>
-														<Modal.Title>Data</Modal.Title>
-													</Modal.Header>
-													<Modal.Body>
-														<Graph /> 
-													</Modal.Body>
-													<Modal.Footer>
-														<Button onClick={this.hideModal3}>Close</Button>
-													</Modal.Footer>	
-												</Modal>
-										</Col>
-									</Row>
-								</ListGroupItem>
-							</ListGroup>
+							<PastEventsList pastEvents={this.state.pastEvents}/>
 						</Col>
 					</Row>
 					<Row bsClass='row'>
